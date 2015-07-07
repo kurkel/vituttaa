@@ -1,0 +1,9 @@
+@font-face {
+    font-family: prime;
+    src: url(prime.ttf);
+}
+
+.prime {
+        font-family: prime;
+        font-size: 3em;
+}

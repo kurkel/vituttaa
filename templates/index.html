@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Vituttaako?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="57x57" href="static/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="static/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="static/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="static/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="static/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="static/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="static/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="static/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="static/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="static/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="static/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="static/favicon-16x16.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="static/custom.css">
+  <link rel="stylesheet" href="static/bootstrap.min.css">
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container text-center">
+    <h1 class="text-center prime">no todellakin vituttaa</h1>
+    <br>
+    <br>
+  </div>
+
+  <form action="/post/" method="POST">
+  <div class="container text-center">
+    <div class="input-group">
+      <span class="input-group-addon" id="nameaddon">Ketä vituttaa</span>
+      <input name="name" type="text" class="form-control" aria-describedby="nameaddon">
+    </div>
+    
+    <br>
+    <br>  
+
+    <div class="form-group text-center">
+      <textarea name="fuckings" class="form-control" placeholder="Mikä vituttaa" rows="5" id="comment"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-default pull-right">Jaa tuskasi</button>
+  </div>
+  </form>
+
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+  {% for post in posts %}
+  
+  <div class="container">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">
+          <h3 class="panel-title"><span>{{ post.name }}</span><span class="pull-right">{{ post.date.ctime() }}</span></h3>
+        </div>
+      </div>
+      <div class="panel-body">
+        <pre>{{ post.post }}</pre>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</body>
