@@ -1,11 +1,9 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from database import Base
+from vittu import db
 
-class Post(Base):
-    __tablename__ = 'posts'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50))
-    post = Column(String)
+class Post(db.Model):
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.String(50))
+    post = Column(db.String)
     date = Column(DateTime)
 
     def __init__(self, name=None, post=None, date=None):
@@ -15,3 +13,6 @@ class Post(Base):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
