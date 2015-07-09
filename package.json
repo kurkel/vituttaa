@@ -1,0 +1,11 @@
+{
+  "name": "vituttaalista-2.0",
+  "version": "0.0.1",
+  "description": "Joskus saattaa vähäsen harmittaa",
+  "dependencies": {
+    "orm": "~2.1.26",
+    "sqliteorm": "0.0.1",
+    "sqlite3": "~3.0.8",
+    "body-parser": "~1.13.2"
+  }
+}

@@ -3,7 +3,24 @@
     src: url(prime.ttf);
 }
 
+pre { text-transform: uppercase;
+	white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */ }
+
 .prime {
         font-family: prime;
         font-size: 3em;
+}
+
+.animate.ng-enter {
+   	-webkit-transition: 1s linear all; /* Chrome */
+	transition: 1s linear all;
+	opacity: 0;
+}
+
+.animate.ng-enter-active {
+   opacity: 1;
 }
