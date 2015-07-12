@@ -24,61 +24,98 @@
   <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://code.angularjs.org/1.3.0-rc.2/angular.min.js"></script>
   <script src="https://code.angularjs.org/1.3.0-rc.2/angular-animate.min.js"></script>
-  <script src="static/client.js"></script>
   <link rel="stylesheet" href="static/custom.css">
-  <link rel="stylesheet" href="static/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
   <script src="static/ng-infinite-scroll.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <script src='/socket.io/socket.io.js'></script>
+  <script src="static/client.js"></script>
   
 </head>
 
 <body>
-<div ng-app="client">
-  <div class="container text-center">
-    <h1 class="text-center prime">no todellakin vituttaa.</h1>
-    <br>
-    <br>
-  </div>
-
-  <div class="container text-center" ng-controller="FormController" >
-    <div class="input-group">
-      <span class="input-group-addon" id="nameaddon">Ketä vituttaa</span>
-      <input name="name" maxlength="40" type="text" class="form-control" aria-describedby="nameaddon" ng-model="name">
-    </div>
-    
-    <br>
-    <br>  
-
-    <div class="form-group text-center">
-      <textarea name="fuckings" maxlength="400" class="form-control" placeholder="Mikä vituttaa" rows="5" id="comment" ng-model="post"></textarea>
+  <div ng-app="client">
+    <div class="container text-center">
+      <h1 class="text-center prime">no todellakin vituttaa.</h1>
+      <br>
+      <br>
     </div>
 
-    <button ng-click="submit()" class="btn btn-default pull-right">Jaa tuskasi</button>
-  </div>
+    <div class="container text-center" ng-controller="FormController" >
+      <div class="input-group">
+        <span class="input-group-addon" id="nameaddon">Ketä vituttaa</span>
+        <input name="name" maxlength="40" type="text" class="form-control" aria-describedby="nameaddon" ng-model="name">
+      </div>
+      
+      <br>
+      <br>  
 
-  <br>
-  <br>
-  <br>
-  <br>
-
-  
-  <div ng-app="client" ng-controller="ListHandlerController">
-  <div infinite-scroll="scroll()">
-  <div class="container animate" ng-repeat="post in itemlist">
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <div class="panel-title">
-          <h3 class="panel-title"><span>{{ post.name }}</span><span class="pull-right">{{ getdate(post.date) }}</span></h3>
+      <div class="form-group text-center">
+        <textarea name="fuckings" maxlength="800" class="form-control" placeholder="Mikä vituttaa" rows="5" id="comment" ng-model="post"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <p class="pull-left">Avautumiskerroin {{post.length}}/800</p>
+          <p class="pull-left" ng-show="post.length >= 700">&nbsp;Taitaa vituttaa ihan huolella?</p>
+        </div>
+        <div class="col-xs-6">
+          <button ng-click="submit()" class="btn btn-default pull-right">Jaa tuskasi</button>
         </div>
       </div>
-      <div class="panel-body">
-        <pre>{{ post.post }}</pre>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    
+    <div ng-controller="ListHandlerController">
+      <div infinite-scroll="scroll()">
+        <div class="container animate" ng-repeat="post in itemlist">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="panel-title">
+                <h3 class="panel-title"><span>{{ post.name }}</span><span class="pull-right">{{ getdate(post.date) }}</span></h3>
+              </div>
+            </div>
+          <div class="panel-body" ng-controller="CommentController" ng-init="init(post.id)">
+
+            <pre>{{ post.post }}</pre>
+            <div class="expandcollapse-item">
+              <div class="row">
+                <div class="text-center col-xs-1" aria-label="Left Align" ng-click="get_comments(post.id)" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}">
+                  <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;
+                </div>
+                <form ng-submit="submit_comment(post.id)"> 
+                <div class="slideDown col-xs-10" ng-hide="active"><input type="text" ng-model="comment" name="comment" maxlength="150" class="form-control" placeholder="Kommentoin." id="comment">
+                </div>
+                <div class="slideDown col-xs-1" ng-hide="active">
+                  <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span></button>
+                </div> 
+                </form>
+              </div>
+                
+            </div>
+          <div class="slideDown" ng-hide="active">
+
+            <div class="expand-collapse-content">
+              <div ng-repeat="item in comments">
+              <div class="row">
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-2">
+                  {{ getdate(item.date) }}
+                </div>
+                <div class="col-xs-5 pull-left" >
+                  <p>{{item.comment}}</p>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
       </div>
     </div>
   </div>
-  </div>
-  </div>
- </div>
 </body>

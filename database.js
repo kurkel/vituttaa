@@ -7,6 +7,15 @@ function setup(db) {
         post      : String,
         date      : Date
     });
+  var Comment  = db.define("comment", {
+        comment      : String,
+        date         : Date
+    });
+  Comment.hasOne("post", Post, {
+      reverse: "comments"
+  })
+
+  Comment.sync();
 }
 
 module.exports = function (cb) {
@@ -14,6 +23,7 @@ module.exports = function (cb) {
 
   orm.connect("sqlite:///home/kurkel/test2.db?debug=true", function (err, db) {
     if (err) return cb(err);
+
 
     connections = db;
     setup(db);

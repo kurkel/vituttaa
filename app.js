@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 var orm = require("orm");
-var port = 3700;
+var port = 80;
 
 console.log("Listening on port " + port);
 
@@ -42,13 +42,23 @@ app.get("/", function(req, res, next){
 
 app.get("/posts/:postid", function(req, res) {
         req.db.models.post.find({id: orm.gt(req.params.postid)}, ["date", "Z"], 10, function(err, posts) {
-            console.log(posts);
+            res.json(posts);
+        });
+});
+
+app.get("/comments/:postid", function(req, res) {
+        req.db.models.comment.find({post_id: req.params.postid}, ["date", "A"], function(err, comments) {
+            res.json(comments);
+        });
+});
+
+app.get("/posts_old/:postid", function(req, res) {
+        req.db.models.post.find({id: orm.lt(req.params.postid)}, ["date", "Z"], 10, function(err, posts) {
             res.json(posts);
         });
 });
 
 app.post("/post/", function(req,res, next) {
-    console.log("moikkelis");
     req.db.models.post.create([{
         name: req.body.name,
         post: req.body.post,
@@ -61,10 +71,20 @@ app.post("/post/", function(req,res, next) {
     })
     });
 
+
     res.sendStatus(200);
+});
     
-    
-    
+app.post("/comment/:postid", function(req, res) {
+    req.db.models.comment.create([{
+        comment: req.body.comment,
+        date: Date.now(),
+        post: req.params.postid
+    }], function(err, items) {
+        if(err) {console.log(err);}
+        io.sockets.emit('comment', {post_id:items[0].post_id, comment: items[0].comment, date: items[0].date});
+    });
+    res.sendStatus(200);
 
 });
 
