@@ -10,20 +10,6 @@ Quality software sponsored by Jenkki
 var client = angular.module('client',['ngAnimate', 'infinite-scroll']);
 
 
-Array.prototype.move = function (old_index, new_index) {
-    if (new_index >= this.length) {
-        var k = new_index - this.length;
-        while ((k--) + 1) {
-            this.push(undefined);
-        }
-    }
-    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this;
-};
-
-
-
-
 client.factory('socket', function ($rootScope) {
   var socket = io.connect();
   return {
@@ -49,29 +35,31 @@ client.factory('socket', function ($rootScope) {
 });
 
 client.controller('ListHandlerController', ['$scope', '$rootScope', '$http', 'socket', function ($scope, $rootScope, $http, socket) {
-    $rootScope.itemlist = [];
+    $scope.itemlist = [];
     var maxid = 0;
     var minid = 0;
 
-    $http.get("http://vituttaa.paitsiossa.com/posts/0").success(function(response) {
+    $http.get("http://vituttaa.paitsiossa.com:3000/posts/0").success(function(response) {
         
         for (var x in response) {
             if (response[x].id > maxid) {maxid = response[x].id;}
         }
-        $rootScope.itemlist = response;
+        $scope.itemlist = response;
         minid = maxid;
-        for (var x in $rootScope.itemlist) {
-            if ($rootScope.itemlist[x].id < minid) {minid = $rootScope.itemlist[x].id}
+        for (var x in $scope.itemlist) {
+            if ($scope.itemlist[x].id < minid) {minid = $scope.itemlist[x].id}
         }
     });
     
 
     socket.on('post', function(id){
-        $http.get("http://vituttaa.paitsiossa.com/posts/" + maxid).success(function(response) {
+        $http.get("http://vituttaa.paitsiossa.com:3000/posts/" + maxid).success(function(response) {
+            console.log(response);
             for (x in response) {
-                $rootScope.itemlist.splice(0,0,response[x])
+                $scope.itemlist.splice(0,0,response[x])
                 if (response[x].id > maxid){maxid = response[x].id;}
             }
+            console.log($scope.itemlist);
         });
     });
 
@@ -85,7 +73,7 @@ client.controller('ListHandlerController', ['$scope', '$rootScope', '$http', 'so
         if (id <= 0) {
             return;
         }
-        $http.get("http://vituttaa.paitsiossa.com/posts_old/" + id).success(function(response) {
+        $http.get("http://vituttaa.paitsiossa.com:3000/posts_old/" + id).success(function(response) {
             for (x in response) {
                 $scope.itemlist.push(response[x])
                 if (response[x].id << minid){minid = response[x].id;}
@@ -105,6 +93,10 @@ client.controller('CommentController', ['$scope', '$http','socket', function($sc
 
     $scope.init = function(id) {
         $scope.postid = id;
+        $http.get("http://vituttaa.paitsiossa.com:3000/comments/" + id).success(function(response) {
+                    $scope.comments = response;
+                });
+
     }
 
     $scope.getdate = function(date) {
@@ -117,7 +109,8 @@ client.controller('CommentController', ['$scope', '$http','socket', function($sc
 
         if (!$scope.active) { 
             if ($scope.comments.length === 0 || !$scope.updated) {
-                $http.get("http://vituttaa.paitsiossa.com/comments/" + id).success(function(response) {
+                $scope.updated = true;
+                $http.get("http://vituttaa.paitsiossa.com:3000/comments/" + id).success(function(response) {
                         $scope.comments = response;
                 });
             }
@@ -135,7 +128,7 @@ client.controller('CommentController', ['$scope', '$http','socket', function($sc
         if($scope.comment === "") {
             return;
         }
-        $http.post("http://vituttaa.paitsiossa.com/comment/" + id, {comment: $scope.comment}).success(function() {$scope.comment = "";});
+        $http.post("http://vituttaa.paitsiossa.com:3000/comment/" + id, {comment: $scope.comment}).success(function() {$scope.comment = "";});
     };
 }]);
 
@@ -160,7 +153,7 @@ client.controller('FormController', ['$scope', '$http', function($scope, $http) 
             post = "Ei vituttanu sittenkää"
         }
 
-        $http.post("http://vituttaa.paitsiossa.com/post/", {name: name, post: post}).success(function() {$scope.name = "";$scope.post="";});
+        $http.post("http://vituttaa.paitsiossa.com:3000/post/", {name: name, post: post}).success(function() {$scope.name = "";$scope.post="";});
     };
     
 }]);

@@ -21,7 +21,7 @@ function setup(db) {
 module.exports = function (cb) {
   if (connection) return connection;
 
-  orm.connect("sqlite:///home/kurkel/test2.db?debug=true", function (err, db) {
+  orm.connect("sqlite:///home/kurkel/test.db?debug=true", function (err, db) {
     if (err) return cb(err);
 
 
